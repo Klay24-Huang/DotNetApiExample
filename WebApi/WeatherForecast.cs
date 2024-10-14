@@ -11,7 +11,5 @@ namespace WebApi
         public string? Summary { get; set; }
 
         public string? Note { get; set; }
-
-        public bool IsHoliday { get; set; }
     }
 }
