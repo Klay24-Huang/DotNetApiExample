@@ -21,6 +21,13 @@ namespace WebApi
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                // Enable Redoc UI
+                app.UseReDoc(c =>
+                {
+                    c.SpecUrl = "/swagger/v1/swagger.json";  // 指定 Swagger 文檔路徑
+                    c.RoutePrefix = "redoc";                 // Redoc UI will be available at `/redoc`
+                });
             }
 
             app.UseHttpsRedirection();
