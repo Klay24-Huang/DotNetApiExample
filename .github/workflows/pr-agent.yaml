@@ -22,5 +22,5 @@ jobs:
               id: pragent
               uses: Codium-ai/pr-agent@main
               env:
-                  GOOGLE_AI_STUDIO_GEMINI_API_KEY: ${{ secrets.GEMINI_KEY }}
+                  GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
