@@ -22,5 +22,6 @@ jobs:
               id: pragent
               uses: Codium-ai/pr-agent@main
               env:
+                  GEMINI_API_ENABLED: true
                   OPENAI_KEY: ${{ secrets.GEMINI_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
