@@ -1,4 +1,7 @@
 
+using Infrastrructure.Extensions;
+using System.Reflection;
+
 namespace WebApi
 {
     public class Program
@@ -13,6 +16,9 @@ namespace WebApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // 自動掃描並註冊服務
+            builder.Services.AddServicesFromAttributes(Assembly.GetExecutingAssembly());
 
             var app = builder.Build();
 
