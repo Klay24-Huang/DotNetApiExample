@@ -68,7 +68,6 @@ namespace Infrastrructure.Helpers
             try
             {
                 var deserializer = new DeserializerBuilder()
-                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
                     .Build();
 
                 var yamlContent = File.ReadAllText(filePath);
@@ -121,7 +120,7 @@ namespace Infrastrructure.Helpers
                 var baseValue = property.GetValue(baseSettings);
                 var newValue = property.GetValue(newSettings);
 
-                if (baseValue == null && newValue != null)
+                if (newValue != null)
                 {
                     property.SetValue(baseSettings, newValue);
                 }
