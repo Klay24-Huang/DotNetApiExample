@@ -1,5 +1,6 @@
 using Domain.Models.Others;
 using Infrastructure.Helpers;
+using NLog.Web;
 
 namespace WebApi
 {
@@ -9,38 +10,51 @@ namespace WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Åª¨úÀô¹ÒÅÜ¼Æ
-            var environment = builder.Environment.EnvironmentName;  // ³o¬O .NET ¤º«ØªºÀô¹ÒÅÜ¼Æ
+            // è®€å–ç’°å¢ƒè®Šæ•¸
+            var environment = builder.Environment.EnvironmentName;  // é€™æ˜¯ .NET å…§å»ºçš„ç’°å¢ƒè®Šæ•¸
 
-            // µù¥U ConfigurationHelper
+            // è¨­å®š NLog ç‚º Logging Provider
+            builder.Logging.ClearProviders();
+            if (environment == "Production")
+            {
+                builder.Logging.SetMinimumLevel(LogLevel.Warning);
+            }
+            else
+            {
+                builder.Logging.SetMinimumLevel(LogLevel.Trace);
+            }
+            builder.Host.UseNLog();
+
+
+            // è¨»å†Š ConfigurationHelper
             builder.Services.AddSingleton<ConfigurationHelper>();
 
-            // ¨Ï¥Î ConfigurationHelper ¥[¸ü YAML °t¸m¨Ãª½±µªğ¦^ AppSettings
+            // ä½¿ç”¨ ConfigurationHelper åŠ è¼‰ YAML é…ç½®ä¸¦ç›´æ¥è¿”å› AppSettings
             builder.Services.AddSingleton(serviceProvider =>
             {
                 var logger = serviceProvider.GetRequiredService<ILogger<ConfigurationHelper>>();
                 var configurationHelper = new ConfigurationHelper(logger);
 
-                // ¨Ï¥Îªx«¬¸ü¤J«ü©w°t¸m¡]¨Ò¦p AppSettings¡^
+                // ä½¿ç”¨æ³›å‹è¼‰å…¥æŒ‡å®šé…ç½®ï¼ˆä¾‹å¦‚ AppSettingsï¼‰
                 return configurationHelper.LoadYamlConfiguration<AppSettings>(environment);
             });
 
-            // µù¥U AppSettings °t¸m¡A°ò©ó¥[¸üªº YAML °t¸m
+            // è¨»å†Š AppSettings é…ç½®ï¼ŒåŸºæ–¼åŠ è¼‰çš„ YAML é…ç½®
             builder.Services.Configure<AppSettings>(builder.Configuration);
 
-            // µù¥U¤é»x©M¨ä¥LªA°È
+            // è¨»å†Šæ—¥èªŒå’Œå…¶ä»–æœå‹™
             builder.Services.AddLogging();
 
-            // µù¥U Web API ±±¨î¾¹¤Î¬ÛÃöªA°È
+            // è¨»å†Š Web API æ§åˆ¶å™¨åŠç›¸é—œæœå‹™
             builder.Services.AddControllers();
 
-            // µù¥U Swagger ³]©w¡]¶È¶}µoÀô¹Ò¡^
+            // è¨»å†Š Swagger è¨­å®šï¼ˆåƒ…é–‹ç™¼ç’°å¢ƒï¼‰
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // °t¸m HTTP ½Ğ¨DºŞ¹D
+            // é…ç½® HTTP è«‹æ±‚ç®¡é“
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
