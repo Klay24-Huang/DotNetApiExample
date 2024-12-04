@@ -26,4 +26,12 @@
     <ProjectReference Include="..\Domain.Logic\Domain.Logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\others\code\ApiExample\WebApi\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\others\code\ApiExample\WebApi\.editorconfig" />
+  </ItemGroup>
+
 </Project>
