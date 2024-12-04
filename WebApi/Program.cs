@@ -1,7 +1,5 @@
-
 using Domain.Models.Others;
 using Infrastrructure.Helpers;
-using Microsoft.Extensions.Options;
 
 namespace WebApi
 {
@@ -14,31 +12,35 @@ namespace WebApi
             // 讀取環境變數
             var environment = builder.Environment.EnvironmentName;  // 這是 .NET 內建的環境變數
 
-            builder.Configuration
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true) // 加載默認的配置文件
-            .AddYamlFile($"appsettings.{environment}.yaml", optional: true, reloadOnChange: true); // 加載環境特定的配置文件
+            // 註冊 ConfigurationHelper
+            builder.Services.AddSingleton<ConfigurationHelper>();
 
+            // 使用 ConfigurationHelper 加載 YAML 配置並直接返回 AppSettings
+            builder.Services.AddSingleton(serviceProvider =>
+            {
+                var logger = serviceProvider.GetRequiredService<ILogger<ConfigurationHelper>>();
+                var configurationHelper = new ConfigurationHelper(logger);
 
-            // 注冊配置並監聽變更
+                // 使用泛型載入指定配置（例如 AppSettings）
+                return configurationHelper.LoadYamlConfiguration<AppSettings>(environment);
+            });
+
+            // 註冊 AppSettings 配置，基於加載的 YAML 配置
             builder.Services.Configure<AppSettings>(builder.Configuration);
 
-            // 注冊後台服務，監聽配置變更並記錄日志
-            builder.Services.AddSingleton<IHostedService, AppSettingsMonitorService>();
-
-            // Register logging and other services
+            // 註冊日誌和其他服務
             builder.Services.AddLogging();
 
-            // Add services to the container.
-
+            // 註冊 Web API 控制器及相關服務
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            // 註冊 Swagger 設定（僅開發環境）
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // 配置 HTTP 請求管道
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -46,12 +48,8 @@ namespace WebApi
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
