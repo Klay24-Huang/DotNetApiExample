@@ -1,5 +1,5 @@
 using Domain.Models.Others;
-using Infrastrructure.Helpers;
+using Infrastructure.Helpers;
 
 namespace WebApi
 {

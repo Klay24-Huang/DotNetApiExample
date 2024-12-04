@@ -1,19 +1,24 @@
 ﻿using Microsoft.Extensions.Logging;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
-namespace Infrastrructure.Helpers
+namespace Infrastructure.Helpers
 {
     /// <summary>
     /// 幫助載入 YAML 配置的輔助類別，支援多層次合併與屬性檢查。
     /// </summary>
-    /// <remarks>
-    /// 初始化 ConfigurationHelper 類別。
-    /// </remarks>
-    /// <param name="logger">用於記錄訊息的日誌記錄器。</param>
-    public class ConfigurationHelper(ILogger<ConfigurationHelper> logger)
+    public class ConfigurationHelper
     {
-        private readonly ILogger<ConfigurationHelper> _logger = logger;
+        private readonly ILogger<ConfigurationHelper> _logger;
+
+        public ConfigurationHelper(ILogger<ConfigurationHelper> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// 載入 YAML 配置檔案，根據環境名稱合併多層配置。
@@ -51,9 +56,6 @@ namespace Infrastrructure.Helpers
                 _logger.LogWarning("環境特定的配置文件不存在: {FilePath}", environmentYamlPath);
             }
 
-            // 檢查是否有缺失的配置屬性
-            CheckForMissingSettings(finalSettings);
-
             return finalSettings;
         }
 
@@ -79,32 +81,6 @@ namespace Infrastrructure.Helpers
                 throw;
             }
         }
-
-        /// <summary>
-        /// 檢查配置類型中是否有未設置的屬性，並記錄警告。
-        /// </summary>
-        /// <typeparam name="T">配置類型。</typeparam>
-        /// <param name="settings">需要檢查的配置物件。</param>
-        private void CheckForMissingSettings<T>(T settings)
-        {
-            if (settings == null)
-            {
-                _logger.LogWarning("配置物件為 null，無法檢查屬性。");
-                return;
-            }
-
-            var missingProperties = settings.GetType()
-                .GetProperties()
-                .Where(p => p.GetValue(settings) == null)
-                .Select(p => p.Name)
-                .ToList();
-
-            if (missingProperties.Count != 0)
-            {
-                _logger.LogWarning("以下配置屬性缺失: {MissingProperties}", string.Join(", ", missingProperties));
-            }
-        }
-
 
         /// <summary>
         /// 合併兩個配置物件的屬性值。
