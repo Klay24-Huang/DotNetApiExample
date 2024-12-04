@@ -42,9 +42,6 @@ namespace WebApi
             // 註冊 AppSettings 配置，基於加載的 YAML 配置
             builder.Services.Configure<AppSettings>(builder.Configuration);
 
-            // 註冊日誌和其他服務
-            builder.Services.AddLogging();
-
             // 註冊 Web API 控制器及相關服務
             builder.Services.AddControllers();
 
