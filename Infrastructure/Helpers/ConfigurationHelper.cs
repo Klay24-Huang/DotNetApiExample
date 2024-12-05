@@ -1,19 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using YamlDotNet.Serialization;
 
-namespace Infrastructure.Helpers
+namespace Shared.Helpers
 {
     /// <summary>
     /// 幫助載入 YAML 配置的輔助類別，支援多層次合併與屬性檢查。
     /// </summary>
-    public class ConfigurationHelper
+    public class ConfigurationHelper(ILogger<ConfigurationHelper> logger)
     {
-        private readonly ILogger<ConfigurationHelper> _logger;
-
-        public ConfigurationHelper(ILogger<ConfigurationHelper> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<ConfigurationHelper> _logger = logger;
 
         /// <summary>
         /// 載入 YAML 配置檔案，根據環境名稱合併多層配置。
@@ -112,7 +107,6 @@ namespace Infrastructure.Helpers
         {
             foreach (var property in typeof(T).GetProperties())
             {
-                var baseValue = property.GetValue(baseSettings);
                 var newValue = property.GetValue(newSettings);
 
                 if (newValue != null)

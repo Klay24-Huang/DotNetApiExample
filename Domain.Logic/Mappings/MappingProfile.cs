@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Domain.Logic.Mappings
+namespace Business.Mappings
 {
     public class MappingProfile : Profile
     {

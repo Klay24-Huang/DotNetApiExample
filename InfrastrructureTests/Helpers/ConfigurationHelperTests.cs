@@ -1,11 +1,11 @@
 ﻿using Xunit;
 using Moq;
-using Microsoft.Extensions.Logging;
-using Domain.Models.Others;
 using Xunit.Abstractions;
-using Infrastructure.Helpers;
+using Shared.Helpers;
+using Domain.Models.Others;
+using Microsoft.Extensions.Logging;
 
-namespace InfrastructureTests.Helpers
+namespace SharedTests.Helpers
 {
     public class ConfigurationHelperTests
     {

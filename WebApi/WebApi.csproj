@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain.Logic\Domain.Logic.csproj" />
+    <ProjectReference Include="..\Domain.Logic\Business.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="nlog.config" />
+    <None Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

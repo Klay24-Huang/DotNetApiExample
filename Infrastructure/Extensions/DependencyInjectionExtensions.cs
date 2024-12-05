@@ -1,8 +1,8 @@
-﻿using Infrastrructure.Attributes;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Shared.Attributes;
 using System.Reflection;
 
-namespace Infrastrructure.Extensions
+namespace Shared.Extensions
 {
     public static class DependencyInjectionExtensions
     {

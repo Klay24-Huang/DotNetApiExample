@@ -5,15 +5,15 @@ VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{1AF9B3FE-9AB3-45D3-B59F-E75F73D970D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Models", "Domain.Models\Domain.Models.csproj", "{630C2C7D-DCDB-412B-9670-0CC2CA5FFD58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Domain.Models\Data.csproj", "{630C2C7D-DCDB-412B-9670-0CC2CA5FFD58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Logic", "Domain.Logic\Domain.Logic.csproj", "{5BB7C91C-2233-46A9-B4D2-7C20245C082B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Domain.Logic\Business.csproj", "{5BB7C91C-2233-46A9-B4D2-7C20245C082B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{804991B6-987C-449B-BF0F-1E5C65FA0916}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureTests", "InfrastrructureTests\InfrastructureTests.csproj", "{950C84C7-0EDC-4E68-89B4-595A21A7991C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedTests", "InfrastrructureTests\SharedTests.csproj", "{950C84C7-0EDC-4E68-89B4-595A21A7991C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastrructure", "Infrastructure\Infrastrructure.csproj", "{B6E517A4-0FD8-483D-85D5-4F1147DA2119}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Infrastructure\Shared.csproj", "{B6E517A4-0FD8-483D-85D5-4F1147DA2119}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,22 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.Models.Db.Repositories
+namespace Data.Db.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T>(TCoeusDbContext tcoeusDbContext) : IRepository<T> where T : class
     {
-        private readonly TCoeusDbContext _tcoeusDbContext;
-
-        public Repository(TCoeusDbContext tcoeusDbContext)
-        {
-            _tcoeusDbContext = tcoeusDbContext;
-        }
-
-        public async Task<T> GetByIdAsync(int id)
+        private readonly TCoeusDbContext _tcoeusDbContext = tcoeusDbContext;
+        public async Task<T?> GetByIdAsync(int id)
         {
             return await _tcoeusDbContext.Set<T>().FindAsync(id);
         }

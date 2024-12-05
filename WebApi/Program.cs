@@ -1,11 +1,11 @@
 using Domain.Models.Others;
-using Infrastructure.Helpers;
 using NLog.Web;
 using System.Reflection;
-using Domain.Logic.Mappings;
-using Domain.Models.Db;
 using Microsoft.EntityFrameworkCore;
-using Infrastrructure.Extensions;
+using Business.Mappings;
+using Data.Db;
+using Shared.Extensions;
+using Shared.Helpers;
 
 namespace WebApi
 {
@@ -20,16 +20,21 @@ namespace WebApi
 
             // 設定 NLog 為 Logging Provider
             builder.Logging.ClearProviders();
-            if (environment == "Production")
-            {
-                builder.Logging.SetMinimumLevel(LogLevel.Warning);
-            }
-            else
-            {
-                builder.Logging.SetMinimumLevel(LogLevel.Trace);
-            }
+            //if (environment == "Production")
+            //{
+            //    builder.Logging.SetMinimumLevel(LogLevel.Warning);
+            //}
+            //else
+            //{
+            //    builder.Logging.SetMinimumLevel(LogLevel.Trace);
+            //}
+            builder.Logging.SetMinimumLevel(LogLevel.Warning);
             builder.Host.UseNLog();
 
+            if (!NLog.LogManager.IsLoggingEnabled())
+            {
+                Console.WriteLine("NLog configuration failed to load.");
+            }
 
             // 註冊 ConfigurationHelper
             builder.Services.AddSingleton<ConfigurationHelper>();

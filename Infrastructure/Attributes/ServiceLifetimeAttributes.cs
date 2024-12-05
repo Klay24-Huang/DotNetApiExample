@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastrructure.Attributes
+﻿namespace Shared.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public class ScopedAttribute : Attribute { }
