@@ -4,6 +4,7 @@ using NLog.Web;
 using System.Reflection;
 using Domain.Logic.Mappings;
 using Domain.Models.Db;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi
 {
