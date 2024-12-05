@@ -1,4 +1,6 @@
-﻿Logging:
+﻿ConnetionStrings:
+    DefaultConnection: "Server=your_server_name;Database=your_database_name;User Id=your_username;Password=your_password;TrustServerCertificate=True;"
+Logging:
   LogLevel:
     Default: Information
     Microsoft.AspNetCore: Warning

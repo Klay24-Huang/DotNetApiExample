@@ -1,9 +1,9 @@
 using Domain.Models.Others;
 using Infrastructure.Helpers;
 using NLog.Web;
-
-using Infrastrructure.Extensions;
 using System.Reflection;
+using Domain.Logic.Mappings;
+using Domain.Models.Db;
 
 namespace WebApi
 {
@@ -54,7 +54,11 @@ namespace WebApi
 
             // 自動掃描並註冊服務
             builder.Services.AddServicesFromAttributes(Assembly.GetExecutingAssembly());
+            builder.Services.AddDbContext<TCoeusDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // autoMapper
+            builder.Services.AddAutoMapper(typeof(MappingProfile)); 
             var app = builder.Build();
 
             // 配置 HTTP 請求管道
