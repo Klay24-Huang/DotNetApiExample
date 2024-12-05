@@ -20,15 +20,14 @@ namespace WebApi
 
             // 設定 NLog 為 Logging Provider
             builder.Logging.ClearProviders();
-            //if (environment == "Production")
-            //{
-            //    builder.Logging.SetMinimumLevel(LogLevel.Warning);
-            //}
-            //else
-            //{
-            //    builder.Logging.SetMinimumLevel(LogLevel.Trace);
-            //}
-            builder.Logging.SetMinimumLevel(LogLevel.Warning);
+            if (environment == "Production")
+            {
+                builder.Logging.SetMinimumLevel(LogLevel.Warning);
+            }
+            else
+            {
+                builder.Logging.SetMinimumLevel(LogLevel.Trace);
+            }
             builder.Host.UseNLog();
 
             if (!NLog.LogManager.IsLoggingEnabled())
