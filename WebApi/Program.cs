@@ -5,6 +5,7 @@ using System.Reflection;
 using Domain.Logic.Mappings;
 using Domain.Models.Db;
 using Microsoft.EntityFrameworkCore;
+using Infrastrructure.Extensions;
 
 namespace WebApi
 {
