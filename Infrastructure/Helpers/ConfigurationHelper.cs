@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace Infrastructure.Helpers
 {
@@ -69,10 +64,33 @@ namespace Infrastructure.Helpers
         {
             try
             {
-                var deserializer = new DeserializerBuilder()
-                    .Build();
-
+                var deserializer = new DeserializerBuilder().Build();
                 var yamlContent = File.ReadAllText(filePath);
+
+                _logger.LogInformation("讀取的 YAML 文件內容為: {YamlContent}", yamlContent);
+
+                // 使用 YAML 解析器提取文件中的所有屬性名稱
+                var yamlObject = new Deserializer().Deserialize<Dictionary<string, object>>(yamlContent);
+                var yamlProperties = yamlObject?.Keys ?? Enumerable.Empty<string>();
+
+                // 提取類型 T 中的所有屬性名稱
+                var typeProperties = typeof(T).GetProperties()
+                    .Where(p => p.CanWrite)
+                    .Select(p => p.Name);
+
+                // 找出缺少的屬性
+                var missingProperties = typeProperties.Except(yamlProperties, StringComparer.OrdinalIgnoreCase).ToList();
+
+                if (missingProperties.Count > 0)
+                {
+                    _logger.LogWarning(
+                        "YAML 文件缺少以下配置類型 {ConfigType} 的屬性: {MissingProperties}",
+                        typeof(T).Name,
+                        string.Join(", ", missingProperties)
+                    );
+                }
+
+                // 反序列化為目標對象
                 return deserializer.Deserialize<T>(yamlContent);
             }
             catch (Exception ex)
@@ -81,6 +99,7 @@ namespace Infrastructure.Helpers
                 throw;
             }
         }
+
 
         /// <summary>
         /// 合併兩個配置物件的屬性值。
