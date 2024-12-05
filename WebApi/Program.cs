@@ -2,6 +2,9 @@ using Domain.Models.Others;
 using Infrastructure.Helpers;
 using NLog.Web;
 
+using Infrastrructure.Extensions;
+using System.Reflection;
+
 namespace WebApi
 {
     public class Program
@@ -48,6 +51,9 @@ namespace WebApi
             // 註冊 Swagger 設定（僅開發環境）
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // 自動掃描並註冊服務
+            builder.Services.AddServicesFromAttributes(Assembly.GetExecutingAssembly());
 
             var app = builder.Build();
 
