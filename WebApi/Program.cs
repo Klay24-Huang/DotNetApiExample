@@ -1,4 +1,3 @@
-using Domain.Models.Others;
 using NLog.Web;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +5,11 @@ using Business.Mappings;
 using Data.Db;
 using Shared.Extensions;
 using Shared.Helpers;
+using Data.Settings;
+using Shared.Constants;
+using NLog;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using Microsoft.Extensions.Options;
 
 namespace WebApi
 {
@@ -18,38 +22,23 @@ namespace WebApi
             // 讀取環境變數
             var environment = builder.Environment.EnvironmentName;  // 這是 .NET 內建的環境變數
 
+            // 加入 YAML 配置支持
+            builder.Configuration
+                .AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true) // Load default yaml
+                .AddYamlFile($"appsettings.{environment}.yaml", optional: true, reloadOnChange: true) // Load environment yaml
+                .AddEnvironmentVariables(); // 環境變數支持
+
             // 設定 NLog 為 Logging Provider
             builder.Logging.ClearProviders();
-            if (environment == "Production")
-            {
-                builder.Logging.SetMinimumLevel(LogLevel.Warning);
-            }
-            else
-            {
-                builder.Logging.SetMinimumLevel(LogLevel.Trace);
-            }
+            builder.Logging.SetMinimumLevel(AppHelper.IsProduction(environment) ? LogLevel.Warning : LogLevel.Trace);
             builder.Host.UseNLog();
 
-            if (!NLog.LogManager.IsLoggingEnabled())
+            if (!LogManager.IsLoggingEnabled())
             {
                 Console.WriteLine("NLog configuration failed to load.");
             }
 
-            // 註冊 ConfigurationHelper
-            builder.Services.AddSingleton<ConfigurationHelper>();
-
-            // 使用 ConfigurationHelper 加載 YAML 配置並直接返回 AppSettings
-            builder.Services.AddSingleton(serviceProvider =>
-            {
-                var logger = serviceProvider.GetRequiredService<ILogger<ConfigurationHelper>>();
-                var configurationHelper = new ConfigurationHelper(logger);
-
-                // 使用泛型載入指定配置（例如 AppSettings）
-                return configurationHelper.LoadYamlConfiguration<AppSettings>(environment);
-            });
-
-            // 註冊 AppSettings 配置，基於加載的 YAML 配置
-            builder.Services.Configure<AppSettings>(builder.Configuration);
+            builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(AppConstants.AppSettings));
 
             // 註冊 Web API 控制器及相關服務
             builder.Services.AddControllers();
@@ -58,14 +47,30 @@ namespace WebApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Get App Settings
+            var appSettings = builder.Configuration.GetSection(AppConstants.AppSettings).Get<AppSettings>();
+
+
             // 自動掃描並註冊服務
             builder.Services.AddServicesFromAttributes(Assembly.GetExecutingAssembly());
-            builder.Services.AddDbContext<TCoeusDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // autoMapper
-            builder.Services.AddAutoMapper(typeof(MappingProfile)); 
+            // MSSQL Setting
+            var LLM_PlateformConnectionString = appSettings?.DataStore.LLM_Platform.GetConnectionString();
+            builder.Services.AddDbContext<TCoeusDbContext>(options =>
+                options.UseSqlServer(LLM_PlateformConnectionString)
+                );
+
+            // autoMapper profile settings
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+
             var app = builder.Build();
+
+            // 取得 ILogger
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+            logger.LogInformation("Application starting...");
+            logger.LogInformation("LLM Plateform MSSQL contnetion string: {LLM_PlateformConnectionString}", LLM_PlateformConnectionString);
+            logger.LogInformation("AppSettings is： {@AppSettings}", appSettings);
 
             // 配置 HTTP 請求管道
             if (app.Environment.IsDevelopment())

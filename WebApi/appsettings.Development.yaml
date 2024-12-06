@@ -1,4 +1,13 @@
-﻿Logging:
-  LogLevel:
-    Default: Information
-    Microsoft.AspNetCore: Warning
+﻿AppSettings:
+    DataStore:
+        LLM_Platform:
+            # mssql
+            Server: "localhost"
+            DatabaseName: "LLM_Plateform"
+            UserName: "sa"
+            Password: "your_password_foo"
+            Port: 1433  # default port for MSSQL
+    CORS:
+        AllowedOrigins: ["*"]  # Allow all origins, or specify a list of domains (e.g., ["http://example.com"])
+
+
