@@ -10,18 +10,18 @@ namespace Business.Services.Api.Users
     [Singleton]
     public class JwtService : IJwtService
     {
-        public string GenerateAccessToken(string username, DateTime expirationTime)
+        public string GenerateAccessToken(string encryptUserId, DateTime expirationTime)
         {
-            return GenerateToken(username, expirationTime);
+            return GenerateToken(encryptUserId, expirationTime);
         }
 
-        public string GenerateRefreshToken(string username, DateTime expirationTime)
+        public string GenerateRefreshToken(string encryptUserId, DateTime expirationTime)
         {
-            return GenerateToken(username, expirationTime);
+            return GenerateToken(encryptUserId, expirationTime);
         }
 
         // 生成 Token（通用方法）
-        private string GenerateToken(string username, DateTime expirationTime) 
+        private string GenerateToken(string encryptUserId, DateTime expirationTime) 
         {
             throw new NotImplementedException();
         }

@@ -8,19 +8,23 @@
         /// <param name="str">要加密的文字</param>
         /// <returns>已加密的文字</returns>
         public static string HasEncrypt(string str) => BCrypt.Net.BCrypt.HashPassword(str);
-        
+
         /// <summary>
         /// 字串加密，可解密
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        //public static string Encrypt(string str){}
+        public static string Encrypt(string str) { 
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// 字串解密
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        //public static string Decrypt(string str) { }
+        public static string Decrypt(string str) {
+            throw new NotImplementedException();
+        }
     }
 }

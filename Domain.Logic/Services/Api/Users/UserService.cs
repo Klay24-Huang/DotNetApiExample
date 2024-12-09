@@ -28,9 +28,10 @@ namespace Business.Services.Api.Users
                 throw new UnauthorizedAccessException("Invalid account or password");
             }
 
+            var encryptUserId = EncryptHelper.Encrypt(user.Id.ToString());
             // 密碼驗證通過，生成 Token 並回應
-            var refreshToken = _jwtService.GenerateRefreshToken();
-            var accessToken = _jwtService.GenerateAccessToken();
+            var refreshToken = _jwtService.GenerateRefreshToken(encryptUserId, DateTime.UtcNow.AddMinutes(30)); // todo： 改成從appsetting 取得過期期間
+            var accessToken = _jwtService.GenerateAccessToken(encryptUserId, DateTime.UtcNow.AddMonths(3));
 
             return new LoginResponse
             {
