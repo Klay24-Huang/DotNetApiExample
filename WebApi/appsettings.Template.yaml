@@ -1,0 +1,18 @@
+﻿AppSettings:
+    DataStore:
+        LLM_Platform:
+            Server: "${LLM_SERVER}"
+            DatabaseName: "${LLM_DATABASE_NAME}"
+            UserName: "${LLM_USERNAME}"
+            Password: "${LLM_PASSWORD}"
+            Port: ${LLM_PORT}
+
+    CORS:
+        AllowedOrigins: ${ALLOWED_ORIGINS}
+
+    Timezone: "${TIMEZONE}"
+
+    JWT:
+        SecretKey: "${JWT_SECRET_KEY}"
+        Issuer: "${JWT_ISSUER}"
+        Audience: "${JWT_AUDIENCE}"

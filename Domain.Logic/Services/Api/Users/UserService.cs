@@ -16,13 +16,13 @@ namespace Business.Services.Api.Users
         private readonly UserRepository _userRepository = userRepository;
         public async Task<LoginResponse> Login(LoginRequest loginRequest)
         {
-            var encryAccount = EncryptHelper.BCryptHash(loginRequest.Account);
+            var encryAccount = EncryptHelper.HasEncrypt(loginRequest.Account);
             // 查詢帳號是否存在
             var user = await _userRepository.GetUserByAccountAsync(encryAccount) ?? 
                 throw new UnauthorizedAccessException("Invalid account or password");
 
             // 比對密碼
-            var isPasswordCorrect = EncryptHelper.BCryptHash(loginRequest.Password) == user.Password;
+            var isPasswordCorrect = EncryptHelper.HasEncrypt(loginRequest.Password) == user.Password;
             if (isPasswordCorrect)
             {
                 throw new UnauthorizedAccessException("Invalid account or password");

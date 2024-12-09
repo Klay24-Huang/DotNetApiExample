@@ -208,3 +208,9 @@ FakesAssemblies/
 
 # JetBrains Rider
 *.sln.iml
+
+# .net project config
+appsettings.*.yaml
+# template and example are not ignored
+!appsettings.template.yaml
+!appsettings.example.yaml
