@@ -17,5 +17,10 @@ namespace Data.Settings
         /// CORS 設定。
         /// </summary>
         public CorsSettings CORS { get; set; } = new CorsSettings();
+
+        /// <summary>
+        /// 時區
+        /// </summary>
+        public string TimeZone { get; set; } = "Taipei Standard Time";
     }
 }

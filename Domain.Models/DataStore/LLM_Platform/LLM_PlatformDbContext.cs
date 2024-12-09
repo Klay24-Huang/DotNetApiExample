@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Data.Db
+namespace Data.DataStore.LLM_Platform
 {
-    public class TCoeusDbContext(DbContextOptions<TCoeusDbContext> options) : DbContext(options)
+    public class LLM_PlatformDbContext(DbContextOptions<LLM_PlatformDbContext> options) : DbContext(options)
     {
 
         // 定義資料表對應

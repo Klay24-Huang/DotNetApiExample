@@ -1,4 +1,4 @@
-﻿namespace Data.Db.Repositories
+﻿namespace Data.DataStore.LLM_Platform.Common
 {
     public interface IRepository<T> where T : class
     {

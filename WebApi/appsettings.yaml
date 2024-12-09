@@ -7,7 +7,15 @@
             UserName: "sa"
             Password: "your_password"
             Port: 1433  # default port for MSSQL
+
     CORS:
         AllowedOrigins: ["*"]  # Allow all origins, or specify a list of domains (e.g., ["http://example.com"])
+    
+    Timezone: "Taipei Standard Time"
+
+    JWT:
+        SecretKey: "secretKey"
+        Issuer: "issuer"
+        Audience: "audience"
 
 

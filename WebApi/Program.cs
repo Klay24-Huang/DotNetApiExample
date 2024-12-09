@@ -2,13 +2,13 @@ using NLog.Web;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Business.Mappings;
-using Data.Db;
 using Shared.Extensions;
 using Shared.Helpers;
 using Data.Settings;
 using Shared.Constants;
 using NLog;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using Data.DataStore.LLM_Platform;
 
 namespace WebApi
 {
@@ -30,8 +30,15 @@ namespace WebApi
             // 註冊 Web API 控制器及相關服務
             ConfigureServices(builder);
 
+            // 取App Settings 
+            var appSettings = builder.Configuration.GetSection(AppConstants.AppSettings).Get<AppSettings>();
+
             // MSSQL 設定
             ConfigureDatabase(builder);
+
+            // timeZone 設定 
+            var timezone = appSettings?.TimeZone ?? string.Empty;
+            ConfigureTimeHelper(timezone);
 
             var app = builder.Build();
 
@@ -40,10 +47,10 @@ namespace WebApi
             logger.LogInformation("Application starting...");
 
             // 確認日誌輸出：資料庫連線字串和 AppSettings
-            var appSettings = builder.Configuration.GetSection(AppConstants.AppSettings).Get<AppSettings>();
             var LLM_PlateformConnectionString = appSettings?.DataStore.LLM_Platform.GetConnectionString();
             logger.LogInformation("LLM Plateform MSSQL connection string: {LLM_PlateformConnectionString}", LLM_PlateformConnectionString);
             logger.LogInformation("AppSettings is： {@AppSettings}", appSettings);
+            logger.LogInformation("TimeZone is: {timeZone}", timezone);
 
             // 配置 HTTP 請求管道
             ConfigureHttpPipeline(app);
@@ -97,7 +104,7 @@ namespace WebApi
             var LLM_PlateformConnectionString = appSettings?.DataStore.LLM_Platform.GetConnectionString();
 
             // 註冊 MSSQL
-            builder.Services.AddDbContext<TCoeusDbContext>(options =>
+            builder.Services.AddDbContext<LLM_PlatformDbContext>(options =>
                 options.UseSqlServer(LLM_PlateformConnectionString)
             );
         }
@@ -114,6 +121,11 @@ namespace WebApi
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
+        }
+
+        private static void ConfigureTimeHelper(string timeZone)
+        {
+            TimeHelper.Initialize(timeZone);
         }
     }
 }
